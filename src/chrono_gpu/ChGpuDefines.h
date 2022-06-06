@@ -24,7 +24,7 @@ namespace chrono {
 namespace gpu {
 
 /// Used to compute position as a function of time.
-typedef std::function<double3(float)> GranPositionFunction;
+using GranPositionFunction = std::function<double3(float)>;
 
 /// Position function representing no motion or offset as a funtion of time.
 const GranPositionFunction GranPosFunction_default = [](float t) { return make_double3(0, 0, 0); };
@@ -51,10 +51,10 @@ enum CHGPU_OUTPUT_FLAGS { ABSV = 1, VEL_COMPONENTS = 2, FIXITY = 4, ANG_VEL_COMP
 
 #define GET_OUTPUT_SETTING(setting) (this->output_flags & setting)
 
-}  // namespace gpu
-}  // namespace chrono
+} // namespace gpu
+} // namespace chrono
 
-typedef longlong3 int64_t3;
+using int64_t3 = longlong3;
 
 constexpr size_t BD_WALL_ID_X_BOT = 0;
 constexpr size_t BD_WALL_ID_X_TOP = 1;
@@ -70,13 +70,13 @@ constexpr size_t NUM_RESERVED_BC_IDS = 6;
 /// At most 8 domains are touched by a sphere
 #define MAX_SPHERES_TOUCHED_BY_SPHERE 12
 /// The L-size of an SD should contain, on average, about these many spheres
-#define AVERAGE_SPHERES_PER_SD_X_DIR 3.5
+#define AVERAGE_SPHERES_PER_SD_X_DIR (3.5 / 25)
 /// The D-size of an SD should contain, on average, about these many spheres
-#define AVERAGE_SPHERES_PER_SD_Y_DIR 3.5
+#define AVERAGE_SPHERES_PER_SD_Y_DIR (3.5 / 25)
 /// The H-size of an SD should contain, on average, about these many spheres
-#define AVERAGE_SPHERES_PER_SD_Z_DIR 3.5
+#define AVERAGE_SPHERES_PER_SD_Z_DIR (3.5 / 25)
 /// Anticipated max number of DEs in an SD; used for setting aside memory ahead of time
-#define MAX_COUNT_OF_SPHERES_PER_SD 256
+#define MAX_COUNT_OF_SPHERES_PER_SD (256 / 5)
 /// Value that indicates non-valid ID. The assumption is that an ID is always a positive integer
 #define NULL_CHGPU_ID UINT_MAX
 /// Value that controls the length unit. A sphere deforms this many simulation length units under its own weight.
@@ -100,6 +100,7 @@ constexpr int warp_size = 32;
 ///
 #define gpuErrchk(ans) \
     { gpuAssert((ans), __FILE__, __LINE__); }
+
 inline void gpuAssert(cudaError_t code, const char* file, int line, bool abort = true) {
     if (code != cudaSuccess) {
         fprintf(stderr, "GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
