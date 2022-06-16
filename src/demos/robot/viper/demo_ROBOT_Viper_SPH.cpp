@@ -337,11 +337,13 @@ void CreateSolidPhase(ChSystemNSC& mphysicalSystem, ChSystemFsi& myFsiSystem, st
         }
 
         myFsiSystem.AddFsiBody(wheel_body);
-        std::string BCE_path = GetChronoDataFile("fsi/demo_BCE/BCE_viperWheel.txt");
+        std::string BCE_path = GetChronoDataFile("fsi/demo_BCE/moonranger-med-rot-2.5.txt");
+        auto transformVector = ChVector<>(0, -0.25, -0.1*0);
         if (i == 0 || i == 2) {
-            myFsiSystem.AddBceFile(paramsH, wheel_body, BCE_path, ChVector<>(0), Q_from_AngZ(CH_C_PI), 1.0, true);
+            myFsiSystem.AddBceFile(paramsH, wheel_body, BCE_path, ChVector<>(0, 0.25, -0.1 * 0), Q_from_AngZ(CH_C_PI),
+                                   1.0, true);
         } else {
-            myFsiSystem.AddBceFile(paramsH, wheel_body, BCE_path, ChVector<>(0), QUNIT, 1.0, true);
+            myFsiSystem.AddBceFile(paramsH, wheel_body, BCE_path, ChVector<>(0, -0.25, -0.1 * 0), QUNIT, 1.0, true);
         }
     }
 }
@@ -432,11 +434,13 @@ void SaveParaViewFiles(ChSystemFsi& myFsiSystem,
             }
 
             auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
-            std::string obj_path = GetChronoDataFile("robot/viper/obj/viper_wheel.obj");
+            std::string obj_path = GetChronoDataFile("robot/viper/obj/MoonRanger_Wheel_medium.obj");
             double scale_ratio = 1.0;
             mmesh->LoadWavefrontMesh(obj_path, false, true);
-            mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(scale_ratio));  // scale to a different size
-            mmesh->RepairDuplicateVertexes(1e-9);                              // if meshes are not watertight
+            auto transformVector = ChVector<>(0, -0.25, -0.1*0);
+
+            mmesh->Transform(transformVector, ChMatrix33<>(scale_ratio));  // scale to a different size
+            mmesh->RepairDuplicateVertexes(1e-9);                          // if meshes are not watertight
 
             double mmass;
             ChVector<> mcog;
